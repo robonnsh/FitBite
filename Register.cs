@@ -14,10 +14,12 @@ namespace FitBite
     {
 
         public List<User> RegisteredUser { get; set; } = new List<User>();
-        
+
         string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + $@"\registered users.xml";
         XmlSerializer serializer = new XmlSerializer(typeof(List<User>));
         FileStream stream = null;
+
+        UserInfo info = new UserInfo();
 
         public void RegisterUser(User user)
         {
@@ -27,13 +29,13 @@ namespace FitBite
                 stream = File.OpenRead(path);
                 RegisteredUser = (List<User>)serializer.Deserialize(stream);
                 stream.Dispose();
-                if(RegisteredUser.Any(u => u.Name == user.Name || u.Email == user.Email))
+                if (RegisteredUser.Any(u => u.Name == user.Name || u.Email == user.Email))
                 {
-                Console.WriteLine("User with this name or email is already registered. ");
+                    Console.WriteLine("User with this name or email is already registered. ");
                     return;
                 }
             }
-            if(RegisteredUser.Find(i => i.ToString() == user.ToString()) == null)
+            if (RegisteredUser.Find(i => i.ToString() == user.ToString()) == null)
             {
                 RegisteredUser.Add(user);
                 stream = File.Create(path);
@@ -46,21 +48,29 @@ namespace FitBite
 
         public void UserLogin(string email, string password)
         {
-            
-             stream = File.OpenRead(path);
-             RegisteredUser = (List<User>)serializer.Deserialize(stream);
-             stream.Dispose();
 
-             if (RegisteredUser.Any(u => u.Email == email && u.Password == password))
-             {
-                    Console.WriteLine("Login Successfuly");
-             }
-             else
-             {
-                    Console.WriteLine("User not found");
-             }
+            stream = File.OpenRead(path);
+            RegisteredUser = (List<User>)serializer.Deserialize(stream);
+            stream.Dispose();
+            var user = RegisteredUser.FirstOrDefault(u => u.Email == email &&
+            u.Password == password);
+
+            if (user != null)
+            {
+                Console.Clear();
+                Console.WriteLine($"Welcome {user.Name}");
+                Console.WriteLine();
+                Console.WriteLine("In order to use --FitBite-- please fill out following information");
+                info.AdditionalInfo();
+                info.ProcessOptions();
+            }
+            else
+            {
+                Console.WriteLine("User not found");
+                return;
+            }
         }
-          
+
     }
 
 }
