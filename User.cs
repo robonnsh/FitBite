@@ -11,7 +11,11 @@ namespace FitBite
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-
+        public UserInfo AdditionalInfo { get; set; }
+        public User()
+        {
+            AdditionalInfo = new UserInfo();
+        }
 
         //private bool IsValidEmail(string email)
         //{
