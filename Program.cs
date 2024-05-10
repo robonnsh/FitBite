@@ -1,10 +1,10 @@
 ﻿using FitBite;
+using System.Security.Cryptography.X509Certificates;
 
 // Login or Register, save user in File - path --Desktop, xml file--
 
 Register register = new Register();
 User newUser = new User();
-
 Console.WriteLine("\t\t---------- Welcome to FitBite ----------");
 Console.WriteLine("");
 Console.WriteLine("In order to use FitBite please Log in or Register");
